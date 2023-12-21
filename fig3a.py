@@ -1,0 +1,93 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Sample data with 8 categories
+categories = [f'Category {i+1}' for i in range(8)]
+ticks = ["All-CPU", "Multi-Axl"] * 4
+value_labels = ["Kernel", "Data Restructuring", "Data Movement"]
+
+large_array = np.array([[0.82602185, 0.21163839, 0.53141449, 0.09967586, 0.39124551,
+        0.07368465, 0.3025162 , 0.05792893],
+       [0.17397815, 0.69167359, 0.46858551, 0.57714922, 0.60875449,
+        0.66492584, 0.6974838 , 0.73279668],
+       [0.        , 0.09668803, 0.        , 0.32317491, 0.        ,
+        0.2613895 , 0.        , 0.20927439]])
+
+values1 = large_array[0]
+values2 = large_array[1]
+values3 = large_array[2]
+
+# Predefined list of blue shades
+blue_shades = ['#a6cee3', '#2980b9', '#08306b']
+
+# Specify figure size in points
+fig_size_pts = (500, 200)  # 500 points x 200 points
+
+# Convert points to inches (1 inch = 72 points)
+fig_size_inches = (fig_size_pts[0] / 72, fig_size_pts[1] / 72)
+
+# Create bar plots with specified figure size and blue shades
+# plt.figure(figsize=fig_size_inches)
+
+# Plotting the stacked bar chart
+fig, ax = plt.subplots(figsize=fig_size_inches)
+
+# reduce the white space between Y-axis and the 1st bar
+# plt.margins(x=0.01)
+
+bar_width = 0.4  # Width of each bar
+
+# Plotting the first set of normalized values
+bar1 = ax.bar(categories, values1, width=bar_width, label=value_labels[0], color=blue_shades[0], zorder=2)
+
+# Plotting the second set of normalized values on top of the first one
+bar2 = ax.bar(categories, values2, width=bar_width, bottom=values1, label=value_labels[1], color=blue_shades[1], zorder=2)
+
+# Plotting the third set of normalized values on top of the previous ones
+bar3 = ax.bar(categories, values3, width=bar_width, bottom=[v1 + v2 for v1, v2 in zip(values1, values2)], label=value_labels[2], color=blue_shades[2], zorder=2)
+
+# Adding vertical lines
+for i in range(2, len(categories), 2):
+    ax.axvline(x=i - 0.5, color='black', linestyle='--', linewidth=1)
+
+# Adding labels and title
+ax.set_ylabel('Runtime Breakdown')
+
+# Adjust legend location to avoid extending outside the plot
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=3)
+
+plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
+
+# tick position generattion and adjustment
+# Calculate the bar positions
+bar_positions = np.arange(len(categories))
+
+# Set the tick positions to the center of each bar
+tick_positions = 0.20 + bar_positions + bar_width / 2 
+ax.set_xticks(tick_positions)
+
+# Rotate x-axis labels for better readability
+ax.set_xticklabels(ticks, ha='right', va="center", )
+
+# remove the visible ticks but keep the labels
+ax.tick_params(tick1On=False)
+
+# Remove the padding at the bottom of the figure
+plt.subplots_adjust(bottom=0.1)
+
+group_labels = [" 1 app", "5 apps", "10 apps", "15 apps"]
+# Add text labels for each group of four bars
+for i in range(0, len(categories),2):
+    group_label = group_labels[i//2]
+    group_center = (i + i + 1) / 2
+    ax.text(group_center, -0.15, group_label, ha='center', va='center', color='black')
+
+# Remove title for the figure
+plt.title('')
+
+name = "motivation-multiaxl-breakdown"
+
+plt.savefig(f'{name}.pdf', bbox_inches='tight', dpi=1000)
+
+# Display the plot
+plt.show()
