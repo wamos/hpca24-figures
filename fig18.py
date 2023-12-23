@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
 from matplotlib.ticker import FuncFormatter
+import matplotlib.font_manager as fm
 
 def custom_formatter(value, pos):
     return f"{value:.1f}$\\times$"
@@ -21,6 +21,10 @@ figsize_inches = (figsize_points[0] / 72, figsize_points[1] / 72)
 
 # Create a figure and axis
 fig, ax = plt.subplots(figsize=figsize_inches)
+
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
 
 # Define different shades of blue
 #blue_shades = ['#3498db', '#2980b9', '#1f618d', '#154360']
@@ -42,21 +46,23 @@ for i in range(len(values)):
     # Add vertical value labels on top of each bar
     for bar, value in zip(bars, values[i]):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1, str(value),
-                ha='center', va='top', color='white', rotation='vertical')
+                ha='center', va='top', color='white', rotation='vertical', fontproperties=custom_font)
 
 # Set the x-axis ticks in the middle of each group
-ax.set_xticklabels(categories)
 ax.set_xticks(bar_positions + (len(values) - 1) * bar_width / 2)
+ax.set_xticklabels(categories, fontproperties=custom_font)
+
 
 plt.tick_params(tick1On=False)
-plt.ylabel('Reduction over Multi-Axl')
+plt.ylabel('Reduction over Multi-Axl', fontproperties=custom_font)
+plt.yticks(fontproperties=custom_font)
 
 # Apply the custom formatter to the y-axis
 plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
 
 # Add legend above the figure, aligned with the center line
 #plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.01), fancybox=True, shadow=False, ncol=4)
-legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4)
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4, prop=custom_font)
 
 # Calculate the legend width in inches
 legend_width_inches = legend.get_bbox_to_anchor().width
@@ -69,7 +75,7 @@ name = __file__.split("/")[-1]
 name = name.split(".")[0]
 
 name = "system-energy-reduction"
-plt.savefig(f'{name}.pdf', bbox_inches='tight', dpi=600)
+plt.savefig(f'{name}.pdf', bbox_inches='tight', dpi=1000)
 
 # Show the plot
 plt.show()

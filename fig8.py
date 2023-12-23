@@ -1,5 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import FuncFormatter
+import matplotlib.font_manager as fm
+
+# Custom formatter function
+def custom_formatter(value, pos):
+    return f"{int(value)}$\\%$"
 
 # Sample data with 20 categories
 categories = [f'Category {i+1}' for i in range(5)]
@@ -12,6 +18,7 @@ large_array = np.array([[0.21, 0.19, 0.17, 0.22, 0.19],
        [0.13, 0.05, 0.04, 0.07, 0.06],
        [0.54, 0.75, 0.77, 0.7 , 0.72]])
 
+large_array = large_array * 100
 values1 = large_array[0]
 values2 = large_array[1]
 values3 = large_array[2]
@@ -33,6 +40,10 @@ fig_size_inches = (fig_size_pts[0] / 72, fig_size_pts[1] / 72)
 # Create bar plots with specified figure size and blue shades
 fig, ax = plt.subplots(figsize=fig_size_inches)
 
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
+
 # Reduce the white space between Y-axis and the 1st bar
 #plt.margins(x=0.01)
 
@@ -49,14 +60,16 @@ bar3 = ax.bar(categories, values3, width=bar_width, bottom=[v1 + v2 for v1, v2 i
 bar4 = ax.bar(categories, values4, width=bar_width, bottom=[v1 + v2 + v3 for v1, v2, v3 in zip(values1, values2, values3)], label=value_labels[3], color=blue_shades[3], zorder=2)
 
 # Adding labels and title
-ax.set_ylabel('Runtime Breakdown')
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=4, columnspacing=0.90)
+ax.set_ylabel('Runtime Breakdown', fontproperties=custom_font)
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=4, columnspacing=0.90, prop=custom_font)
 
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
+plt.yticks(fontproperties=custom_font)
 
 # Tick position generation and adjustment
 tick_loc = np.arange(len(categories))
 ax.set_xticks(tick_loc)
+ax.set_xticklabels(categories,fontproperties=custom_font)
 
 # Rotate x-axis labels for better readability
 #ax.set_xticklabels(ticks, rotation=90, ha='right', va="center")
@@ -67,6 +80,8 @@ ax.tick_params(tick1On=False)
 # Remove the padding at the bottom of the figure
 plt.subplots_adjust(bottom=0.1)
 
+# Apply the custom formatter to the y-axis
+plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
 
 # Remove title for the figure
 plt.title('')
@@ -76,7 +91,8 @@ name = name.split(".")[0]
 print(name)
 
 name = "profiling_vtune"
-plt.savefig(f'{name}.png', bbox_inches='tight', dpi=600)
+plt.savefig(f'{name}.pdf', bbox_inches='tight', dpi=600)
+#plt.savefig(f'{name}.png', bbox_inches='tight', dpi=600)
 
 # Display the plot
 plt.show()

@@ -1,5 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import FuncFormatter
+import matplotlib.font_manager as fm
+
+# Custom formatter function
+def custom_formatter(value, pos):
+    return f"{int(value)}$\\%$"
 
 # Sample data with 8 categories
 categories = [f'Category {i+1}' for i in range(8)]
@@ -13,6 +19,7 @@ large_array = np.array([[0.51408972, 0.37032805, 0.30759739, 0.22569554, 0.97252
        [0.0031297 , 0.02889044, 0.02586908, 0.0189811 , 0.00592215,
         0.01963729, 0.03990705, 0.04164661]])
 
+large_array = large_array * 100
 values1 = large_array[0]
 values2 = large_array[1]
 values3 = large_array[2]
@@ -34,6 +41,10 @@ fig_size_inches = (fig_size_pts[0] / 72, fig_size_pts[1] / 72)
 # Plotting the stacked bar chart
 fig, ax = plt.subplots(figsize=fig_size_inches)
 
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
+
 # reduce the white space between Y-axis and the 1st bar
 #plt.margins(x=0.01)
 
@@ -54,9 +65,10 @@ for i in range(4, len(categories), 4):
 ax.set_ylabel('Runtime Breakdown')
 
 # Adjust legend location to avoid extending outside the plot
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=3)
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=3, prop=custom_font)
 
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
+plt.yticks(fontproperties=custom_font)
 
 # tick position generattion and adjustment
 tick_loc = np.arange(len(categories))
@@ -64,7 +76,7 @@ tick_loc = tick_loc + 0.1
 ax.set_xticks(tick_loc)
 
 # Rotate x-axis labels for better readability
-ax.set_xticklabels(ticks, rotation=90, ha='right', va="center")
+ax.set_xticklabels(ticks, rotation=90, ha='right', va="center", fontproperties=custom_font)
 
 # remove the visible ticks but keep the labels
 ax.tick_params(tick1On=False)
@@ -72,18 +84,22 @@ ax.tick_params(tick1On=False)
 # Remove the padding at the bottom of the figure
 plt.subplots_adjust(bottom=0.1)
 
-group_labels = ["Multi-Axl", "DMX"]
-# Add text labels for each group of four bars
-for i in range(0, len(categories), 4):
-    group_label = group_labels[i//4]
-    group_center = (i + i + 3) / 2
-    ax.text(group_center, -0.15, group_label, ha='center', va='center', color='black')
+# group_labels = ["Multi-Axl", "DMX"]
+# # Add text labels for each group of four bars
+# for i in range(0, len(categories), 4):
+#     group_label = group_labels[i//4]
+#     group_center = (i + i + 3) / 2
+#     ax.text(group_center, -0.15, group_label, ha='center', va='center', color='black')
 
 # Remove title for the figure
 plt.title('')
 
+# Apply the custom formatter to the y-axis
+plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
+
 name = "multi-kernel-breakdown"
 plt.savefig(f'{name}.pdf', bbox_inches='tight', dpi=1000)
+plt.savefig(f'{name}.png', bbox_inches='tight', dpi=1000)
 
 # Display the plot
 plt.show()

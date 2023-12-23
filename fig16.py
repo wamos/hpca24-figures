@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
+import matplotlib.font_manager as fm
 
 # Custom formatter function
 def custom_formatter(value, pos):
@@ -42,6 +43,11 @@ fig_size_inches = (fig_size_pts[0] / 72, fig_size_pts[1] / 72)
 
 # Create bar plots with specified figure size and blue shades
 plt.figure(figsize=fig_size_inches)
+
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
+
 # reduce the white space between Y-axis and the 1st bar
 plt.margins(x=0.01)
 
@@ -50,17 +56,6 @@ bars1 = plt.bar(bar_positions1, values1, width=bar_width, label=labels[0], color
 bars2 = plt.bar(bar_positions2, values2, width=bar_width, label=labels[1], color=blue_shades[1], zorder=2)
 bars3 = plt.bar(bar_positions3, values3, width=bar_width, label=labels[2], color=blue_shades[2], zorder=2)
 bars4 = plt.bar(bar_positions4, values4, width=bar_width, label=labels[3], color=blue_shades[3], zorder=2)
-
-# Add value labels on top of each bar
-# for bar, values in zip([bars1, bars2, bars3, bars4], [values1, values2, values3, values4]):
-#     for value, position in zip(values, bar):
-#         plt.text(position.get_x() + position.get_width() / 2 + 0.005,
-#                  position.get_height() + 0.05,
-#                  str(value),
-#                  ha='center',
-#                  va='bottom',
-#                  rotation='vertical',
-#                  color='black')
 
 # Add value labels on top of each bar, except bars1
 for bar, values in zip([bars2, bars3, bars4], [values2, values3, values4]):
@@ -71,7 +66,7 @@ for bar, values in zip([bars2, bars3, bars4], [values2, values3, values4]):
                  ha='center',
                  va='top',
                  rotation='vertical',
-                 color='white')
+                 color='white', fontproperties=custom_font)
 
 # Remove title for the figure
 plt.title('')
@@ -80,12 +75,13 @@ plt.title('')
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
 
 # Set x-axis ticks and labels at the center of each group of bars
-plt.xticks(bar_centers, ticks)
+plt.xticks(bar_centers, ticks, fontproperties=custom_font)
 plt.tick_params(tick1On=False)
-plt.ylabel('Throughput Improvement')
+plt.yticks(fontproperties=custom_font)
+plt.ylabel('Throughput Improvement\nDMX/Multi-Axl', fontproperties=custom_font)
 
 # Add legend outside and on top of the figure with no shadow
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4)
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4, prop=custom_font)
 
 name = __file__.split("/")[-1]
 name = name.split(".")[0]

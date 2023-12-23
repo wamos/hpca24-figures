@@ -1,10 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-
-# Custom formatter function
-# def custom_formatter(value, pos):
-#     return f"{int(value)}$\\times$"
+import matplotlib.font_manager as fm
 
 def custom_formatter(value, pos):
     return f"{value:.1f}$\\times$"
@@ -45,6 +42,11 @@ fig_size_inches = (fig_size_pts[0] / 72, fig_size_pts[1] / 72)
 
 # Create bar plots with specified figure size and blue shades
 plt.figure(figsize=fig_size_inches)
+
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
+
 # reduce the white space between Y-axis and the 1st bar
 plt.margins(x=0.01)
 
@@ -63,9 +65,7 @@ for bar, values in zip([bars1, bars2, bars3, bars4], [values1, values2, values3,
                  ha='center',
                  va='top',
                  rotation='vertical',
-                 color='white')
-
-
+                 color='white', fontproperties=custom_font)
 
 # Remove title for the figure
 plt.title('')
@@ -74,12 +74,13 @@ plt.title('')
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
 
 # Set x-axis ticks and labels at the center of each group of bars
-plt.ylabel('Speedup/Multi-Axl')
-plt.xticks(bar_centers, ticks)
+plt.ylabel('Speedup DMX/Multi-Axl', fontproperties=custom_font)
+plt.xticks(bar_centers, ticks, fontproperties=custom_font)
+plt.yticks(fontproperties=custom_font)
 plt.tick_params(tick1On=False)
 
 # Add legend outside and on top of the figure with no shadow
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4)
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4, prop=custom_font)
 
 name = __file__.split("/")[-1]
 name = name.split(".")[0]

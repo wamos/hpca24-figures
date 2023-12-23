@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+import matplotlib.font_manager as fm
 from matplotlib.ticker import FuncFormatter
 
 # Custom formatter function
@@ -17,10 +18,10 @@ bar_width = 0.4  # Width of each bar
 bar_positions = np.arange(len(categories))
 
 # Define different shades of blue
-blue_shades = ['#add8e6', '#73b3ff', '#2980b9', '#1c558e']
+gray_shades = ['#333333', '#333333', '#333333', '##333333']
 
 # Specify figsize in points
-figsize_points = (250, 200)  # 450 points x 150 points
+figsize_points = (250, 150)  # 450 points x 150 points
 
 # Convert figsize from points to inches
 figsize_inches = (figsize_points[0] / 72, figsize_points[1] / 72)
@@ -28,14 +29,20 @@ figsize_inches = (figsize_points[0] / 72, figsize_points[1] / 72)
 # Create a figure and axis
 fig, ax = plt.subplots(figsize=figsize_inches)
 
+# Specify a font for the plot
+font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
+custom_font = fm.FontProperties(fname=font_path)
+
 #plt.margins(x=0.02)
 
 # Create bar plots
-bars = plt.bar(bar_positions, values, width=bar_width, color=blue_shades[2])
+bars = plt.bar(bar_positions, values, width=bar_width, color=gray_shades[2])
 
 # Set ticks beneath each bar
 tick_positions = [pos for pos in bar_positions]
 
+y_ticks = np.arange(0, 4.6, 1.5)
+plt.yticks(y_ticks, fontproperties=custom_font)
 # To adjust the boldness of the font, you can use the weight parameter 
 # in the fontdict argument with a value other than 'bold'. 
 # The weight parameter accepts values like 
@@ -51,13 +58,13 @@ for bar, value in zip(bars, values):
              ha='center',
              va='center',
              rotation='vertical',
-             color='white')
+             color='white', fontproperties=custom_font)
 
 # Add grid below the bars (only horizontal grid with solid lines)
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
 
 plt.tick_params(tick1On=False)
-plt.ylabel('Speedup/Multi-Axl')
+plt.ylabel('Speedup DMX/Multi-Axl', fontproperties=custom_font)
 
 # Apply the custom formatter to the y-axis
 plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
