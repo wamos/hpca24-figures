@@ -50,6 +50,7 @@ fig, ax = plt.subplots(figsize=fig_size_inches)
 # Specify a font for the plot
 font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
 custom_font = fm.FontProperties(fname=font_path)
+font_size = '14'
 
 # reduce the white space between Y-axis and the 1st bar
 plt.margins(x=0.01)
@@ -63,16 +64,21 @@ bar2 = ax.bar(categories, values2, bottom=values1, label=value_labels[1], color=
 # Plotting the third set of normalized values on top of the previous ones
 bar3 = ax.bar(categories, values3, bottom=[v1 + v2 for v1, v2 in zip(values1, values2)], label=value_labels[2], color=blue_shades[2], zorder=2)
 
+# Adding labels and title
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.20), fancybox=True, shadow=False, ncol=3,prop=custom_font)
+
+# force to make the font larger
+for text in legend.get_texts():
+    text.set_fontsize(font_size)  # You can use other font size options or specify an integer value
+
+ax.set_ylabel('Runtime Breakdown',fontproperties=custom_font, fontsize=font_size)
+
 # Adding vertical lines
 for i in range(4, len(categories), 4):
     ax.axvline(x=i - 0.5, color='black', linestyle='--', linewidth=1)
 
-# Adding labels and title
-ax.set_ylabel('Runtime Breakdown',fontproperties=custom_font)
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=3,prop=custom_font)
-
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
-plt.yticks(fontproperties=custom_font)
+plt.yticks(fontproperties=custom_font, fontsize=font_size)
 
 # tick position generattion and adjustment
 tick_loc = np.arange(len(categories))
@@ -80,7 +86,7 @@ tick_loc = tick_loc + 0.25
 ax.set_xticks(tick_loc)
 
 # Rotate x-axis labels for better readability
-ax.set_xticklabels(ticks, rotation=90, ha='right', va="center", fontproperties=custom_font)
+ax.set_xticklabels(ticks, rotation=90, ha='right', va="center", fontproperties=custom_font, fontsize=font_size)
 
 # remove the visible ticks but keep the labels
 ax.tick_params(tick1On=False)

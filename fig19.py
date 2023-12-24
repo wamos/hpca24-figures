@@ -15,17 +15,20 @@ values = np.array([[3.5, 3.3],  # Values for Category A
                    [6.5, 5.1]]) # Values for Category D
 
 # Specify figsize in points
-figsize_points = (600, 200)  # 450 points x 150 points
+figsize_points = (500, 200)  # 450 points x 150 points
 
 # Convert figsize from points to inches
 figsize_inches = (figsize_points[0] / 72, figsize_points[1] / 72)
 
 # Create a figure and axis
 fig, ax = plt.subplots(figsize=figsize_inches)
+y_ticks = np.arange(0, 9, 2)
+plt.ylim(0, 8)
 
 # Specify a font for the plot
 font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
 custom_font = fm.FontProperties(fname=font_path)
+font_size = '14'
 
 # Define different shades of blue
 #blue_shades = ['#3498db', '#2980b9', '#1f618d', '#154360']
@@ -48,19 +51,19 @@ for i in range(len(values)):
 
     # Add vertical value labels on top of each bar
     for bar, value in zip(bars, values[i]):
-        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.15, str(value),
-                ha='center', va='top', color='white', rotation='vertical', fontproperties=custom_font)
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.15, str(value),
+                ha='center', va='bottom', color='black', rotation='vertical', fontsize=font_size, fontproperties=custom_font)
 
 # Set the x-axis ticks in the middle of each group
 #ax.set_xticklabels(categories)
 #ax.set_xticks(bar_positions + (len(values) - 1) * bar_width / 2)
 #plt.xticks(bar_positions + (len(values) - 1) * bar_width / 2, categories, fontdict={'weight': 'semibold'})
-plt.xticks(bar_positions + (len(values) - 1) * bar_width / 2, categories, fontproperties=custom_font)
-plt.yticks(fontproperties=custom_font)
+plt.xticks(bar_positions + (len(values) - 1) * bar_width / 2, categories, fontproperties=custom_font, fontsize=font_size)
+plt.yticks(y_ticks, fontproperties=custom_font, fontsize=font_size)
 
 plt.tick_params(tick1On=False)
 #plt.ylabel('Speedup/Multi-Axl', fontdict={'weight': 'semibold'})
-plt.ylabel('Speedup DMX/Multi-Axl', fontproperties=custom_font)
+plt.ylabel('Speedup DMX/Multi-Axl', fontproperties=custom_font, fontsize=font_size)
 
 # Apply the custom formatter to the y-axis
 plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
@@ -68,13 +71,11 @@ plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))
 # Add legend above the figure, aligned with the center line
 #plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.01), fancybox=True, shadow=False, ncol=4)
 #legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4, prop={'weight': 'semibold'})
-legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.155), fancybox=True, shadow=False, ncol=4, prop=custom_font)
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.20), fancybox=True, shadow=False, ncol=4, prop=custom_font)
 
-# Calculate the legend width in inches
-legend_width_inches = legend.get_bbox_to_anchor().width
-
-# Adjust the legend position to center it
-legend.set_bbox_to_anchor((0.5 - legend_width_inches / 2, 1.155))
+# force to make the font larger
+for text in legend.get_texts():
+    text.set_fontsize(font_size)  # You can use other font size options or specify an integer value
 
 # Save the plot to a file (e.g., PDF format)
 name = __file__.split("/")[-1]

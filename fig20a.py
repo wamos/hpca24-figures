@@ -17,11 +17,11 @@ bar_width = 0.4  # Width of each bar
 # Calculate bar positions
 bar_positions = np.arange(len(categories))
 
-# Define different shades of blue
-gray_shades = ['#333333', '#333333', '#333333', '##333333']
+# a dark blue for this
+gray_shades = ['#2e2b5e', '#2e2b5e', '#2e2b5e', '#2e2b5e']
 
 # Specify figsize in points
-figsize_points = (250, 150)  # 450 points x 150 points
+figsize_points = (250, 160)  # 450 points x 150 points
 
 # Convert figsize from points to inches
 figsize_inches = (figsize_points[0] / 72, figsize_points[1] / 72)
@@ -32,6 +32,7 @@ fig, ax = plt.subplots(figsize=figsize_inches)
 # Specify a font for the plot
 font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
 custom_font = fm.FontProperties(fname=font_path)
+font_size = '14'
 
 #plt.margins(x=0.02)
 
@@ -41,30 +42,34 @@ bars = plt.bar(bar_positions, values, width=bar_width, color=gray_shades[2])
 # Set ticks beneath each bar
 tick_positions = [pos for pos in bar_positions]
 
-y_ticks = np.arange(0, 4.6, 1.5)
-plt.yticks(y_ticks, fontproperties=custom_font)
+y_ticks = np.arange(0, 5.0, 1.5)
+plt.ylim(0, 5.2)
+
+plt.yticks(y_ticks, fontproperties=custom_font, fontsize=font_size)
 # To adjust the boldness of the font, you can use the weight parameter 
 # in the fontdict argument with a value other than 'bold'. 
 # The weight parameter accepts values like 
 # 'normal', 'bold', 'heavy', 'light', etc., or numerical values like 400, 700 
 # for controlling the thickness of the font.
-plt.xticks(tick_positions, categories)
+plt.xticks(tick_positions, categories, fontsize='12')
 
 # Add value labels vertically within each bar
 for bar, value in zip(bars, values):
     plt.text(bar.get_x() + bar.get_width() / 2,
-             bar.get_height() - 0.25,
+             bar.get_height() + 0.45,
              str(value),
              ha='center',
              va='center',
              rotation='vertical',
-             color='white', fontproperties=custom_font)
+             color='black', 
+             fontsize=font_size,
+             fontproperties=custom_font)
 
 # Add grid below the bars (only horizontal grid with solid lines)
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
 
 plt.tick_params(tick1On=False)
-plt.ylabel('Speedup DMX/Multi-Axl', fontproperties=custom_font)
+plt.ylabel('Speedup\nDMX/Multi-Axl', fontproperties=custom_font, fontsize=font_size)
 
 # Apply the custom formatter to the y-axis
 plt.gca().yaxis.set_major_formatter(FuncFormatter(custom_formatter))

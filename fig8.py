@@ -9,7 +9,7 @@ def custom_formatter(value, pos):
 
 # Sample data with 20 categories
 categories = [f'Category {i+1}' for i in range(5)]
-categories = ["Video\nSurvillence", "Sound\nDetetcion", "Brain\nStimulation", "Personal\nInfo Redaction", "Database\nHash Join"]
+categories = ["Video\nSurvillence", "Sound\nDetetcion", "Brain\nStimulation", "Personal Info\nRedaction", "Database\nHash Join"]
 value_labels = ["Retiring", "Bad Speculation", "Frontend Bound", "Backend Bound"]
 
 # Modified large_array with 4 rows and 5 columns
@@ -43,6 +43,7 @@ fig, ax = plt.subplots(figsize=fig_size_inches)
 # Specify a font for the plot
 font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
 custom_font = fm.FontProperties(fname=font_path)
+font_size = '14'
 
 # Reduce the white space between Y-axis and the 1st bar
 #plt.margins(x=0.01)
@@ -60,16 +61,20 @@ bar3 = ax.bar(categories, values3, width=bar_width, bottom=[v1 + v2 for v1, v2 i
 bar4 = ax.bar(categories, values4, width=bar_width, bottom=[v1 + v2 + v3 for v1, v2, v3 in zip(values1, values2, values3)], label=value_labels[3], color=blue_shades[3], zorder=2)
 
 # Adding labels and title
-ax.set_ylabel('Runtime Breakdown', fontproperties=custom_font)
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=4, columnspacing=0.90, prop=custom_font)
+ax.set_ylabel('Runtime Breakdown', fontproperties=custom_font, fontsize=font_size)
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.20), fancybox=True, shadow=False, ncol=4, columnspacing=0.90, prop=custom_font)
+
+# force to make the font larger
+for text in legend.get_texts():
+    text.set_fontsize(font_size)  # You can use other font size options or specify an integer value
 
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
-plt.yticks(fontproperties=custom_font)
+plt.yticks(fontproperties=custom_font, fontsize=font_size)
 
 # Tick position generation and adjustment
 tick_loc = np.arange(len(categories))
 ax.set_xticks(tick_loc)
-ax.set_xticklabels(categories,fontproperties=custom_font)
+ax.set_xticklabels(categories,fontproperties=custom_font, fontsize=font_size)
 
 # Rotate x-axis labels for better readability
 #ax.set_xticklabels(ticks, rotation=90, ha='right', va="center")

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FuncFormatter
 import matplotlib.font_manager as fm
+from matplotlib.font_manager import FontProperties
 
 # Custom formatter function
 def custom_formatter(value, pos):
@@ -42,6 +43,7 @@ fig, ax = plt.subplots(figsize=fig_size_inches)
 # Specify a font for the plot
 font_path = "/Users/stingw/Downloads/calibri.ttf"  # Replace with the path to your desired font file
 custom_font = fm.FontProperties(fname=font_path)
+font_size = '14'
 
 # reduce the white space between Y-axis and the 1st bar
 # plt.margins(x=0.01)
@@ -62,24 +64,29 @@ for i in range(2, len(categories), 2):
     ax.axvline(x=i - 0.5, color='black', linestyle='--', linewidth=1)
 
 # Adding labels and title
-ax.set_ylabel('Runtime Breakdown', fontproperties=custom_font)
+ax.set_ylabel('Runtime Breakdown', fontproperties=custom_font, fontsize=font_size)
 
 # Adjust legend location to avoid extending outside the plot
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=False, ncol=3, prop=custom_font)
+# Create a FontProperties object with the desired font size
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.20), fancybox=True, ncol=3, prop=custom_font)
+
+# force to make the font larger
+for text in legend.get_texts():
+    text.set_fontsize(font_size)  # You can use other font size options or specify an integer value
 
 plt.grid(axis='y', linestyle='-', alpha=0.7, zorder=1)
 
-plt.yticks(fontproperties=custom_font)
+plt.yticks(fontproperties=custom_font, fontsize=font_size)
 # tick position generattion and adjustment
 # Calculate the bar positions
 bar_positions = np.arange(len(categories))
 
 # Set the tick positions to the center of each bar
-tick_positions = 0.10 + bar_positions + bar_width / 2 
+tick_positions = 0.15 + bar_positions + bar_width / 2 
 ax.set_xticks(tick_positions)
 
 # Rotate x-axis labels for better readability
-ax.set_xticklabels(ticks, ha='right', va="center", fontproperties=custom_font)
+ax.set_xticklabels(ticks, ha='right', va="center", fontproperties=custom_font, fontsize="12")
 
 # remove the visible ticks but keep the labels
 ax.tick_params(tick1On=False)
